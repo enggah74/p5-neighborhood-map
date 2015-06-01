@@ -1,128 +1,149 @@
+/**
+ * Create a namespace for functions and variables
+ * @namespace app
+ */
 
-  var map;
-  var infowindow;
-  var restaurantInfo;
+ var app = app|| {};
 
-  // YELP Authentication tokens
-  var YELP_BASE_URL = 'http://api.yelp.com/v2/search';
-  var YELP_KEY = 'O1rWaoR54AYSYRwVt_j0UA';
-  var YELP_TOKEN = 'Qlgr-Q-besAEJD0DgzroM6Odd1cp_SX9';
-  var YELP_KEY_SECRET = 'jIL0YvUYF5XVbty6rGAsGehGl2c';
-  var YELP_TOKEN_SECRET = 'KTU76LW--FsB88wuiW2nVo-pJCs';
+ /**
+ * Set up and run code for filling elements.
+ */
+function initialize() {
+    'use strict';
+    // Default map center; Union City CA
+    app.unioncityCenter = new google.maps.LatLng(37.593392, -122.043830)
+    // Create a map of union city using html element map-canvas
+    app.map = app.getGoogleMap(document.getElementById('map-canvas'));
+    // Add restaurant markers to the map of union city
+    app.addRestaurants();
+    // Display a list of restaurants
+    app.displayListOfRestaurants
+
+}
+
+//Load the map of Union City
+google.maps.event.addDomListener(window, 'load', initialize);
 
 
-  /**
-   * Generates a random number and returns it as a string for OAuthentication
-   * @return {string}
-   */
-  function nonce_generate() {
-    return (Math.floor(Math.random() * 1e12).toString());
-  }
+/**
+ * Create a KnockoutJS view model to be able to click a restaurant
+ */
 
-  // Obtain authentication before using yelp api
-  function obtainYelpInfo(name) {
 
-    var yelp_url = YELP_BASE_URL;
-
-    var parameters = {
-      oauth_consumer_key: YELP_KEY,
-      oauth_token: YELP_TOKEN,
-      oauth_nonce: nonce_generate(),
-      oauth_timestamp: Math.floor(Date.now()/1000),
-      oauth_signature_method: 'HMAC-SHA1',
-      oauth_version : '1.0',
-      location: 'Union City CA',
-      term: name,
-      limit: 1,
-      callback: 'cb'              // This is crucial to include for jsonp implementation in AJAX or else the oauth-signature will be wrong.
+/**
+ * Create a map object added to the namespace app
+ */
+app.getGoogleMap = function(mapDiv) {
+    // Configure and add map to map div.
+    var mapOptions = {
+        center: app.unioncityCenter,
+        zoom: 15
     };
+    return new google.maps.Map(mapDiv, mapOptions);
+};
 
-    var encodedSignature = oauthSignature.generate('GET', yelp_url, parameters, YELP_KEY_SECRET, YELP_TOKEN_SECRET);
-    parameters.oauth_signature = encodedSignature;
-
-    // Ajax call to yelp to obtain info about the restaurant
-    var settings = {
-      url: yelp_url,
-      data: parameters,
-      cache: true,                // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
-      dataType: 'jsonp',
-      success: function(results) {
-        var info = results.businesses;
-        restaurantInfo = {
-          name: info.display_name,
-          phone: info.display_phone,
-          address: info.display_address,
-          rating: info.rating,
-          snippet_text: info.snippet_text,
-          img_url: info.img_url
-        }
-      },
-      error:function(jqXHR, textStatus, errorThrown) {
-        var err = textStatus + ", " + errorThrown;
-        restaurantInfo = {error: 'Not Found'};
-      }
-    };
-
-    // Send AJAX query via jQuery library.
-    $.ajax(settings);
-
-  }
-
-  // Windows calls initialize to draw the map and obtain the different restaurants based on the location
-  function initialize() {
-    var unioncity = new google.maps.LatLng(37.593392, -122.043830);
-
-    map = new google.maps.Map(document.getElementById('map-canvas'), {
-      center: unioncity,
-      zoom: 15
-    });
-
-    var request = {
-      location: unioncity,
+/**
+ * Add restaurants to the map object
+ */
+app.addRestaurants = function() {
+  // Define request parameters
+  var request = {
+      location: app.unioncityCenter,
       radius: 500,
       types: ['restaurant']
-    };
-    infowindow = new google.maps.InfoWindow();
-    var service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, callback);
-  }
+  };
+  // Define google service for nearby search with callback to process results
+  var service = new google.maps.places.PlacesService(app.map);
+  service.nearbySearch(request, app.callback);
+}
 
-  function callback(results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      for (var i = 0; i < results.length; i++) {
-        createMarker(results[i]);
-        displayPlaces(results[i]);
-      }
+/**
+ * Iterate through the results objects and create a marker
+ * Save the results objects to an array to be displayed in a list
+ */
+app.places = [];
+app.callback = function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    console.log('results',results);
+    for (var i = 0; i < results.length; i++) {
+      app.createMarker(results[i]);
+      app.places.push(results[i]);
     }
   }
+}
 
-  function createMarker(place) {
-    var placeLoc = place.geometry.location;
-    var marker = new google.maps.Marker({
-      map: map,
+/**
+ * Add a marker to each of the restaurants found
+ * Define an event to open a window to display basic info about a restaurant
+ * when marker is clicked
+ */
+app.currentMarker = null;
+app.createMarker = function(place) {
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+      map: app.map,
+      animation: google.maps.Animation.DROP,
       position: place.geometry.location,
       title: place.name
-    });
+  });
+  // Add a listener whenever a restaurant marker is clicked
+  google.maps.event.addDomListener(marker, 'click', function() {
+    app.displayInfoWindow(place, marker);
+  });
+}
 
-    obtainYelpInfo(place.name);
+/**
+ * Create an infowindow for each restaurant marker
+ */
+ app.displayInfoWindow = function(place, marker) {
+  // if app.infoWindow exists, close it
+  if (app.infoWindow) {
+    app.infoWindow.close();
+  }
+  app.infoWindow = new google.maps.InfoWindow({
+    content: [
+      '<img src="' ,
+      place.icon,
+      '" /><font style="color:#000;">',
+      place.name,
+      '<br />Vicinity: ',
+      place.vicinity,
+      '</font>'
+          ].join('')
+  });
+  app.infoWindow.open(app.map, marker);
 
-    // prepare info window
-    var content = '<img src="' + place.icon + '" /><font style="color:#000;">' + place.name +
-            '<br />Vicinity: ' + place.vicinity + '</font>';
-
-    google.maps.event.addListener(marker, 'click', function() {
-      infowindow.close();
-      infowindow.setContent(content);
-      infowindow.open(map, this);
-      console.log("place="+place.name);
-    });
+  /**
+   * Animate the marker that's clicked to bounce
+   * If there is an active marker, deactivate.
+   * Otherwise, bounce the marker
+  */
+  if(app.currentMarker != null) {
+    app.currentMarker.setAnimation(null);
   }
 
-  function displayPlaces(place) {
-      var listItem = place.name;
-      var displayItem = '<li id="item" class="article">' + listItem + '</li>';
-      $('#wikipedia-links').append(displayItem);
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  app.currentMarker = marker;
+}
+
+/**
+ * Display same restaurant in a list
+ */
+app.displayListOfRestaurants {
+  var listItem;
+  var displayItem;
+
+  /**
+   * Iterate through the array of restaurants saved from app.createMarker
+   * and append to an unordered list
+   */
+  // Iterate through the array of restaurants saved from app.createMarker
+  for (var i = 0; i < app.places.length; i++) {
+      listItem = app.places[i];
+      displayItem = '<li>' +
+                    '<span data-bind="text: place" class="article">' +
+                    listItem +
+                    '</span></li>';
+      $('#placeId').append(displayItem);
   }
-
-  google.maps.event.addDomListener(window, 'load', initialize);
-
+}
