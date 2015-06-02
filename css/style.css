@@ -28,5 +28,8 @@
   .article:first-child {
       border-top:none;
   }
+  .placeul {
+    border: none;
+  }
 
 </style>

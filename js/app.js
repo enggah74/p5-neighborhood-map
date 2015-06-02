@@ -17,7 +17,7 @@ function initialize() {
     // Add restaurant markers to the map of union city
     app.addRestaurants();
     // Apply Knockout bindings
-    ko.applyBindings(app.RestaurantViewModel);
+    //ko.applyBindings(app.RestaurantViewModel);
 }
 
 //Load the map of Union City
@@ -91,7 +91,7 @@ app.callback = function callback(results, status) {
       app.createMarker(results[i]);
       app.places.push(results[i]);
     }
-    //app.displayListOfRestaurants();
+    app.displayListOfRestaurants();
   }
 }
 
@@ -162,8 +162,8 @@ app.displayListOfRestaurants = function() {
    */
   for (var i = 0; i < app.places.length; i++) {
       listItem = app.places[i].name;
-      displayItem = '<li>' +
-                    '<span data-bind="text: place" class="article">' +
+      displayItem = '<li class="article">' +
+                    '<span >' +
                     listItem +
                     '</span></li>';
       $('#placeId').append(displayItem);
