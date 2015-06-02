@@ -19,17 +19,18 @@
 
             <h3>Restaurants</h3>
 
-            <!-- Search the list of restaurants -->
+            <!-- Search the list of restaurants
             <form role="form">
               <div class="form-group">
                 <input placeholder="Search from this list ..." type="search" class="form-control" name="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
               </div>
-            </form>
+            </form>-->
 
 
             <!-- List of restaurants -->
             <div class="content list-group">
-              <ul id="placeId" class="list-group" data-bind="foreach: app.places">
+              <ul class="list-group" data-bind="foreach: restaurants">
+                <li class="article"><span data-bind="text: restaurant"></span></li>
               </ul>
             </div>
 
@@ -50,8 +51,7 @@
 
     <!-- jQuery and Knockout libraries -->
     <script src="js/libs/jquery.min.js"></script>
-    <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
-    <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
+    <script src="js/libs/knockout-3.3.0.js"></script>
     <script src="js/app.js"></script>
 
   </body>

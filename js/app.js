@@ -3,10 +3,10 @@
  * @namespace app
  */
 
- var app = app|| {};
+ var app = app || {};
 
  /**
- * Set up and run code for filling elements.
+ * High level function to execute modular functions
  */
 function initialize() {
     'use strict';
@@ -16,9 +16,8 @@ function initialize() {
     app.map = app.getGoogleMap(document.getElementById('map-canvas'));
     // Add restaurant markers to the map of union city
     app.addRestaurants();
-    // Display a list of restaurants
-    app.displayListOfRestaurants
-
+    // Apply Knockout bindings
+    ko.applyBindings(app.RestaurantViewModel);
 }
 
 //Load the map of Union City
@@ -26,9 +25,32 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 /**
- * Create a KnockoutJS view model to be able to click a restaurant
+ * Create a KnockoutJS view model to be able to click or search a restaurant
  */
 
+app.Restaurant = function(data) {
+  this.restaurant = ko.observable(data.name);
+}
+
+app.RestaurantViewModel = function() {
+
+  var self = this;
+
+  self.query = ko.observable("");
+
+  app.places.forEach(function(restaurantItem) {
+    self.restaurants.push( new app.Restaurant(restaurantItem) );
+  });
+
+  /**
+  self.restaurants = ko.dependentObservable(function() {
+    var search = this.query().toLowerCase();
+      return ko.utils.arrayFilter(app.places, function(place) {
+        return place.name.toLowerCase().indexOf(search) >= 0;
+      });
+  }, app.RestaurantViewModel);
+  */
+}
 
 /**
  * Create a map object added to the namespace app
@@ -69,6 +91,7 @@ app.callback = function callback(results, status) {
       app.createMarker(results[i]);
       app.places.push(results[i]);
     }
+    //app.displayListOfRestaurants();
   }
 }
 
@@ -102,21 +125,21 @@ app.createMarker = function(place) {
   }
   app.infoWindow = new google.maps.InfoWindow({
     content: [
-      '<img src="' ,
-      place.icon,
-      '" /><font style="color:#000;">',
-      place.name,
-      '<br />Vicinity: ',
-      place.vicinity,
-      '</font>'
-          ].join('')
+        '<img src="' ,
+        place.icon,
+        '" /><font style="color:#000;">',
+        place.name,
+        '<br />Vicinity: ',
+        place.vicinity,
+        '</font>'
+                  ].join('')
   });
   app.infoWindow.open(app.map, marker);
 
   /**
-   * Animate the marker that's clicked to bounce
-   * If there is an active marker, deactivate.
-   * Otherwise, bounce the marker
+   * Animate the marker that's clicked to bounce.
+   * If there is an active marker, deactivate the bounce.
+   * Otherwise, bounce the marker.
   */
   if(app.currentMarker != null) {
     app.currentMarker.setAnimation(null);
@@ -129,7 +152,7 @@ app.createMarker = function(place) {
 /**
  * Display same restaurant in a list
  */
-app.displayListOfRestaurants {
+app.displayListOfRestaurants = function() {
   var listItem;
   var displayItem;
 
@@ -137,9 +160,8 @@ app.displayListOfRestaurants {
    * Iterate through the array of restaurants saved from app.createMarker
    * and append to an unordered list
    */
-  // Iterate through the array of restaurants saved from app.createMarker
   for (var i = 0; i < app.places.length; i++) {
-      listItem = app.places[i];
+      listItem = app.places[i].name;
       displayItem = '<li>' +
                     '<span data-bind="text: place" class="article">' +
                     listItem +
