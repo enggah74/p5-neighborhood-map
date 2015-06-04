@@ -144,6 +144,7 @@ app.createMarker = function(place) {
   google.maps.event.addDomListener(marker, 'click', function() {
     app.displayInfoWindow(place, marker);
   });
+
 }
 
 /**
@@ -154,6 +155,7 @@ app.displayInfoWindow = function(place, marker) {
   if (app.infoWindow) {
     app.infoWindow.close();
   }
+  map.panTo(marker.getPosition());
   app.infoWindow = new google.maps.InfoWindow({
     content: [
         '<img src="' ,

@@ -29,7 +29,7 @@ function initialize() {
   // Add restaurant markers to the map of union city
   app.addRestaurants();
   // Apply Knockout bindings to display a list of restaurants
-  ko.applyBindings(app.viewModel);
+  ko.applyBindings(new app.viewModel());
 }
 
 //Load the map of Union City
@@ -39,20 +39,11 @@ google.maps.event.addDomListener(window, 'load', initialize);
 /**
  * Create a KnockoutJS view model to be able to click or search a restaurant
  */
-function Model() {
+app.viewModel = function() {
   var self = this;
   self.query = ko.observable("");
-  self.restaurants = ko.observableArray();
+  self.restaurants = ko.observableArray(app.places);
 }
-
-// Define viewModel object for ko data binders
-app.viewModel = new Model();
-
-// Populate restaurants array
-app.places.forEach(function(place) {
-  app.viewModel.restaurants.push(place);
-});
-
 
 
   /**
@@ -116,13 +107,14 @@ app.addRestaurants = function() {
  * Save the results objects to an array to be displayed in a list
  */
 app.places = [];
+app.markers = [];
 app.callback = function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
     console.log('results',results);
     for (var i = 0; i < results.length; i++) {
-      app.createMarker(results[i]);
+      app.createMarker(results[i], i);
       app.places.push(results[i]);
-      app.addFoursquareInfo(results[i],i);
+      app.addFoursquareInfo(results[i], i);
     }
     app.displayListOfRestaurants();
   }
@@ -134,7 +126,7 @@ app.callback = function callback(results, status) {
  * when marker is clicked
  */
 app.currentMarker = null;
-app.createMarker = function(place) {
+app.createMarker = function(place, index) {
   var placeLoc = place.geometry.location;
   var marker = new google.maps.Marker({
       map: app.map,
@@ -142,6 +134,8 @@ app.createMarker = function(place) {
       position: place.geometry.location,
       title: place.name
   });
+  // Save each marker in an array
+  app.markers[index] = marker;
   // Add a listener whenever a restaurant marker is clicked
   google.maps.event.addDomListener(marker, 'click', function() {
     app.displayInfoWindow(place, marker);
@@ -195,12 +189,16 @@ app.displayListOfRestaurants = function() {
    */
   for (var i = 0; i < app.places.length; i++) {
       listItem = app.places[i].name;
-      displayItem = '<li class="article">' +
+      displayItem = '<li id="listId" class="article">' +
                     '<span >' +
                     listItem +
                     '</span></li>';
       $('#placeId').append(displayItem);
   }
+  $("li").click(function() {
+    index = $(this).index();
+    app.displayInfoWindow(app.places[index], index);
+  });
 }
 
 /**
