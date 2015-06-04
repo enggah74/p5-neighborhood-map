@@ -19,25 +19,23 @@
 
             <h3>Restaurants</h3>
 
-            <!-- Search the list of restaurants
+            <!-- Search the list of restaurants -->
             <form role="form">
               <div class="form-group">
                 <input placeholder="Search from this list ..." type="search" class="form-control" name="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
               </div>
-            </form>-->
-
-
-            <!-- List of restaurants
-            <div class="content list-group">
-              <ul class="list-group" data-bind="foreach: restaurants">
-                <li class="article"><span data-bind="text: restaurant"></span></li>
-              </ul>
-            </div>-->
+            </form>
 
             <!-- List of restaurants -->
             <div class="content list-group">
               <ul id="placeId">
+              </ul>
+            </div>
 
+            <!-- List of restaurants -->
+            <div class="content list-group">
+              <ul data-bind="foreach: app.viewModel.restaurants">
+                <li class="article" data-bind="text: name"></li>
               </ul>
             </div>
 
@@ -46,6 +44,7 @@
 
           <!-- /map -->
           <div class="col-md-9" id="map-canvas"></div>
+          <div class="col-md-9" id="pano"></div>
 
 
 

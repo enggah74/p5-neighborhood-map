@@ -39,18 +39,10 @@ google.maps.event.addDomListener(window, 'load', initialize);
 /**
  * Create a KnockoutJS view model to be able to click or search a restaurant
  */
-function Model() {
+app.viewModel = new (function() {
   var self = this;
   self.query = ko.observable("");
-  self.restaurants = ko.observableArray();
-}
-
-// Define viewModel object for ko data binders
-app.viewModel = new Model();
-
-// Populate restaurants array
-app.places.forEach(function(place) {
-  app.viewModel.restaurants.push(place);
+  self.restaurants = ko.observableArray([app.placeslaces]);
 });
 
 

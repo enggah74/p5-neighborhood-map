@@ -45,11 +45,9 @@ function Model() {
   self.restaurants = ko.observableArray();
 }
 
-// Define viewModel object for ko data binders
 app.viewModel = new Model();
 
-// Populate restaurants array
-app.places.forEach(function(place) {
+app.places.forEach(function(place){
   app.viewModel.restaurants.push(place);
 });
 

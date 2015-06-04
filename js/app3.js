@@ -28,6 +28,12 @@ function initialize() {
   app.getStreetViewMap(document.getElementById('pano'));
   // Add restaurant markers to the map of union city
   app.addRestaurants();
+  // Define viewModel object for ko data binders
+  app.viewModel = new Model();
+  // Populate restaurants array
+  app.places.forEach(function(place) {
+    app.viewModel.restaurants.push(place);
+  });
   // Apply Knockout bindings to display a list of restaurants
   ko.applyBindings(app.viewModel);
 }
@@ -44,15 +50,6 @@ function Model() {
   self.query = ko.observable("");
   self.restaurants = ko.observableArray();
 }
-
-// Define viewModel object for ko data binders
-app.viewModel = new Model();
-
-// Populate restaurants array
-app.places.forEach(function(place) {
-  app.viewModel.restaurants.push(place);
-});
-
 
 
   /**
