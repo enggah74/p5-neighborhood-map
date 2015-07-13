@@ -1,0 +1,97 @@
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -ms-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        html,
+        body,
+        #map-canvas {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .placesIdClass {
+            background-color: white;
+            width: 30%;
+            margin: 10px;
+            border: 1px solid gray;
+            border-radius: 10px;
+        }
+        .placeList {
+            list-style: none;
+            font-size: 16px;
+            padding: 6px;
+        }
+        .placeListItem {
+            padding: 3px;
+            border-bottom: 1px solid blue;
+        }
+        .searchDivClass {
+            width: 400px;
+            margin: 15px 15px 15px 30px;
+        }
+        .searchClass {
+            font-size: 16px;
+            line-height: 30px;
+            height: 30px;
+            top: 5px;
+            padding: 0 8px;
+            width: 100%;
+        }
+        h3,
+        h4 {
+            width: 100%;
+            text-align: center;
+        }
+        .infoWindowContainer {
+            height: 100%;
+            padding: 3px;
+        }
+        .infoWindowSection {
+            margin: 0;
+            padding: 2px;
+        }
+        .infoWindowSection p {
+            margin: 0;
+        }
+        .pano {
+            width: 480px;
+            height: 270px;
+        }
+        .panoError {
+            position: absolute;
+            top: 10;
+            right: 10;
+            z-index: 1000;
+        }
+        .hidden {
+            visibility: hidden;
+        }
+        .unhide {
+            visibility: visible;
+        }
+        .text-centered {
+            text-align: center;
+        }
+
+        /** Mobile **/
+        @media only screen and (max-width: 767px), only screen and (max-device-width: 767px) {
+            #pano {
+                visibility: hidden;
+            }
+        }
+        /** Tablet **/
+        @media only screen and (min-width : 768px) and (max-width : 1024px), {
+            #pano {
+                visibility: visible;
+                width: 25%
+            }
+        }
+        /** Tablet (landscape) **/
+        @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+            #pano {
+                visibility: visible;
+                width: 25%
+            }
+        }

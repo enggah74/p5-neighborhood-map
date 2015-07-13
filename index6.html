@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Index6 - P5 Neighborhood Map</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="css/style6.css" rel="stylesheet" media="screen">
+
+
+  </head>
+  <body>
+
+    <!-- google map -->
+    <div id="map-canvas"></div>
+
+    <!-- google search input textbox-->
+    <div id="searchDivId" class="searchDivClass">
+        <form role="search" onsubmit="return false">
+            <input type="text" id="pac-input" class="searchClass" placeholder="Search for a location ...">
+        </form>
+    </div>
+
+    <!-- list of pre-defined locations  -->
+    <div id="placesId" class="placesIdClass">
+      <h3>Union City Selected Places</h3>
+      <ul data-bind="foreach: allUnionCityPlaces" class="placeList">
+            <li data-bind="click: $parent.toggleInfoWindow" class="placeListItem">
+                <span data-bind="text: $data.name"></span>
+            </li>
+        </ul>
+    </div>
+
+
+    <!-- Google Places API -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+
+    <!-- jQuery and Knockout libraries -->
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/libs/knockout-3.3.0.js"></script>
+    <script src="js/app6.js"></script>
+
+  </body>
+</html>
