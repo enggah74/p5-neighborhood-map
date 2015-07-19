@@ -21,7 +21,7 @@ var FOURSQUARE_BASE_URL = 'https://api.foursquare.com/v2/venues/search';
 var FOURSQUARE_CLIENT_ID = 'R42ZEH51THS5SGBYAXFED5Y4FDPQDM3CE5H3RKIRICXX5QD3';
 var FOURSQUARE_CLIENT_SECRET = 'JQ45ALHZFKTXREINGXUBQNA3YIJGWHOUFGA3TE4P0G2OV22V';
 var FOURSQUARE_MODE = 'foursquare';
-var FOURSQUARE_DEFAULT_ICON = 'https://foursquare.com/img/categories/food/default_64.png';
+var FOURSQUARE_DEFAULT_ICON = 'https://foursquare.com/img/categories/food/default_32.png';
 var FOURSQUARE_VERSION = today.getFullYear().toString() + ("0" + (today.getMonth() + 1)).slice(-2) + ("0" + (today.getDate())).slice(-2);
 
 
@@ -62,8 +62,25 @@ var initializeMap = function() {
   /*** Creates the search box ***/
   searchBox = new google.maps.places.SearchBox(input, autoCompleteOptions);
 
+  /* Google StreetView API panoramic images will be placed here */
+  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById("pano"));
 
-}
+  /* Initialize the street view service */
+  sv = new google.maps.StreetViewService();
+
+  /* Default the panoramic image to Union City neighborhood */
+  var panoramaOptions = {
+    position: unioncityCenter,
+    pov: {
+      heading: 90,
+      pitch: 0
+    }
+  };
+
+  /* Adds the panorama object to the page */
+  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+  map.setStreetView(panorama);
+};
 
 
 /*********************************************
@@ -75,6 +92,7 @@ var initializeMap = function() {
  *********************************************/
 var UnionCityPlaceModel = function(place) {
   this.markerOpen = ko.observable(false);
+  this.current_animatedMarker = "";
   this.receivedFourSquareUpdate = ko.observable(false);
   this.types = ko.observableArray(place.types);
   this.name = ko.observable(place.name);
@@ -85,7 +103,7 @@ var UnionCityPlaceModel = function(place) {
 
   this.nameDiv = ko.computed(function () {
     console.log("name=", this.name());
-    return '<div class="infoWindowSection"><h4>' + this.icon + '  ' + this.name() + '</h4></div>';
+    return '<div class="infoWindowSection"><h5>' + this.icon + '  ' + this.name() + '</h5></div>';
   }, this);
 
   this.vicinityDiv = ko.computed(function () {
@@ -93,9 +111,9 @@ var UnionCityPlaceModel = function(place) {
   }, this);
 
   this.infoWindowDiv = ko.computed(function() {
-    return '<div class="infoWindowContainer">' + this.nameDiv() + this.vicinityDiv() + '</div>';
+    return '<div class="infoWindowContainer" style="width: 300px;"><div class="MarkerContent">' + this.nameDiv() + this.vicinityDiv() + '</div></div>';
   }, this);
-}
+};
 
 /**************************************
  * Add all these functions needed to the
@@ -115,7 +133,7 @@ UnionCityPlaceModel.prototype = {
       radius: 2000,
       name: place.name,
       type: place.types
-    }
+    };
     /*** Call the google nearbysearch place api for a place ***/
     service.nearbySearch(request, this.addPlaceResultsCallBack.bind(this));
     /*** Create an infoWindow object for a place ***/
@@ -123,10 +141,9 @@ UnionCityPlaceModel.prototype = {
       content: this.infoWindowDiv()
     });
   },
-  /***  ***/
+  /*** Create markers for each of the places searched ***/
   addPlaceResultsCallBack: function(results, status) {
     if (status === google.maps.places.PlacesServiceStatus.OK) {
-      console.log("results", results);
       this.createMapMarker(results);
     }
   },
@@ -141,7 +158,9 @@ UnionCityPlaceModel.prototype = {
     this.types = places[0].types;
     this.latitude = places[0].geometry.location.lat();
     this.longitude = places[0].geometry.location.lng();
-    this.geometryLocation = places[0].geometry.location; // panorama
+    this.newCenter = new google.maps.LatLng(this.latitude, this.longitude);
+    this.geometryLocation = places[0].geometry.location;
+    this.panoRadius = 10; // use to determine the panorama image
     // Create a marker for the place
     self.marker = new google.maps.Marker({
       map: map,
@@ -151,14 +170,17 @@ UnionCityPlaceModel.prototype = {
     // Use default icon from Foursquare
     var icon = new google.maps.MarkerImage(places[0].icon, null, null, null, new google.maps.Size(25, 25));
     self.marker.setIcon(icon);
+    // Set marker to the center of the map
+    map.setCenter(this.newCenter);
     // Define an event to display infoWindow when a marker is clicked
     google.maps.event.addListener(self.marker, 'click', function () {
-        self.markerOpen(!self.markerOpen());
+      self.markerOpen(!self.markerOpen());
     });
-    if (self.markerOpen()) {
-        self.infoWindow.open(map, self.marker);
-    }
 
+    if (self.markerOpen()) {
+      self.infoWindow.open(map, self.marker);
+    }
+    // Obtain name from Foursquare API
     self.setFoursquareInfo();
   },
   // Call Foursquare API and obtain the name of the location
@@ -168,10 +190,12 @@ UnionCityPlaceModel.prototype = {
       var venues = data.response.venues;
       self.name = venues[0].name;
       self.receivedFourSquareUpdate(true);
-    }).fail(function () {
+    }).fail(function (jqxhr, textStatus, error) {
         self.fourSquareError('<span class="error">' + ' Error encountered from Foursquare. Please try again. ' + '</span>');
         self.name = '';
         self.receivedFourSquareUpdate(true);
+        var err = textStatus + ',' + error;
+        console.log('Request Failed: ' + err);
     });
   },
   getFourSquareInfo: function() {
@@ -189,7 +213,6 @@ UnionCityPlaceModel.prototype = {
           v: FOURSQUARE_VERSION,
           m: FOURSQUARE_MODE
         }
-
     });
   }
 };
@@ -220,14 +243,22 @@ var UnionCityPlaceViewModel = function () {
   self.subscribeToFourSquareUpdate = function (place) {
     place.receivedFourSquareUpdate.subscribe(function (receivedFourSquareUpdate) {
       if (receivedFourSquareUpdate && place.infoWindow) {
-          place.infoWindow.setContent(place.infoWindowDiv());
-          /*** update panoramic view ***/
-          if (location.markerOpen()) {
-            self.getPanoramaImage();
-          }
+        place.infoWindow.setContent(place.infoWindowDiv());
+        /*** update panoramic view ***/
+        if (place.markerOpen()) {
+          self.getPanoramaImage();
+        }
       }
     });
   };
+
+  /* pushes new location and adds subscriptions above */
+  self.addPlace = function (place) {
+      self.subscribeToMapClick(place);
+      self.subscribeToFourSquareUpdate(place);
+      place.markerOpen(true);
+  };
+
 
   /* Close current window to open new one */
   self.closeInfoWindows = function () {
@@ -258,7 +289,7 @@ var UnionCityPlaceViewModel = function () {
     use the place latitude and longitude from Google search
     to obtain new panoramic image
     ***/
-    if (location.geometryLocation) {
+    if (place.geometryLocation) {
       self.getPanoramaImage();
     }
   };
@@ -268,7 +299,7 @@ var UnionCityPlaceViewModel = function () {
   };
 
   self.getPanoramaImage = function () {
-      sv.getPanoramaByLocation(self.currentLocation().geometryLocation, self.currentLocation().panoRadius, self.processSVData);
+      sv.getPanoramaByLocation(self.currentPlace().geometryLocation, self.currentPlace().panoRadius, self.processSVData);
   };
 
   /* searches for the closest panoramic image available */
@@ -276,7 +307,7 @@ var UnionCityPlaceViewModel = function () {
     if (status === google.maps.StreetViewStatus.OK) {
       $('#panoError').removeClass('unhide');
       panorama.setPano(data.location.pano);
-      var heading = google.maps.geometry.spherical.computeHeading(data.location.latLng, self.currentLocation().geometryLocation);
+      var heading = google.maps.geometry.spherical.computeHeading(data.location.latLng, self.currentPlace().geometryLocation);
       panorama.setPov({
           heading: heading,
           pitch: 0
@@ -284,7 +315,7 @@ var UnionCityPlaceViewModel = function () {
       panorama.setVisible(true);
     } else if (status === google.maps.StreetViewStatus.ZERO_RESULTS) {
         /* increase the radius needed to search for this pano */
-        self.currentLocation().panoRadius += 40;
+        self.currentPlace().panoRadius += 40;
         self.getPanoramaImage();
     } else {
         $('#panoError').addClass('unhide');
@@ -303,7 +334,6 @@ var UnionCityPlaceViewModel = function () {
       self.allUnionCityPlaces.push(currentPlace);
       self.subscribeToMapClick(currentPlace);
       self.subscribeToFourSquareUpdate(currentPlace);
-      console.log("i="+i+" currentPlace=",currentPlace);
   }
 
   google.maps.event.addListener(searchBox, 'places_changed', function () {
@@ -311,16 +341,28 @@ var UnionCityPlaceViewModel = function () {
     if (places.length === 0) {
         return;
     }
-    var newLocation = new NeighborhoodLocation({name: places[0].name, types: places[0].types});
-    newLocation.init();
-    self.addPlace(newLocation);
+    var newPlace = new UnionCityPlaceModel({name: places[0].name, types: places[0].types});
+    newPlace.init();
+    self.addPlace(newPlace);
   });
-  self.setCurrentLocation(self.allLocations()[0]);
-
 
 };
 
+window.addEventListener('load', function() {
+  var status = document.getElementById("status");
 
+  function updateOnlineStatus(event) {
+    var condition = navigator.onLine ? "online" : "offline";
+
+    status.className = condition;
+    status.innerHTML = condition.toUpperCase();
+
+    log.insertAdjacentHTML("beforeend", "Event: " + event.type + "; Status: " + condition);
+  }
+
+  window.addEventListener('online',  updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+});
 
 /*** Load the map of Union City ***/
 google.maps.event.addDomListener(window, 'load', initializeMap);
@@ -330,20 +372,3 @@ google.maps.event.addDomListener(window, 'load', initializeMap);
 setTimeout(function () {
     ko.applyBindings(new UnionCityPlaceViewModel());
 }, 1000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

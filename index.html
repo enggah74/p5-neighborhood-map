@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>P5 Union City Neighborhood</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="build/css/style.min.css" rel="stylesheet" media="screen">
+
+  </head>
+  <body>
+
+    <!-- google map -->
+    <div id="map-canvas"></div>
+
+    <!-- google search input autocomplete textbox-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-col-sm-6">
+                <input type="text" id="pac-input" class="searchClass controls" placeholder="Search for a location ..."/>
+            </div>
+        </div>
+    </div>
+
+    <!-- list of pre-defined locations  -->
+    <div class="container-fluid">
+        <div class="row">
+            <div id="placesId" class="col-sm-12 col-md-12 placesIdClass">
+                <h4>My Neighborhood - Union City</h4>
+                <ul data-bind="foreach: allUnionCityPlaces" class="placeList">
+                    <li data-bind="click: $parent.toggleInfoWindow" class="placeListItem">
+                        <span data-bind="text: $data.name"></span>
+                    </li>
+                </ul>
+                <div class="attributionContainer">
+                    <div class="fourSquareAttribution">
+                        <p class="text-centered">name provided by foursquare</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- holds panoramic images of the location selected -->
+    <div id="pano" class="pano"></div>
+    <!-- used overlay div to display if error getting panoramic image -->
+    <div id="panoError" class="panoError hidden">
+        <span>Error getting image from google StreeView</span>
+    </div>
+
+    <!-- used to provide the status if there is connection to internet -->
+    <div id="status"></div>
+    <!-- used to display error message when the web page is not properly loaded -->
+    <div id="log"></div>
+
+    <!-- Google Places API -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+
+    <!-- jQuery and Knockout libraries -->
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/libs/knockout-3.3.0.js"></script>
+    <script src="build/js/app.min.js"></script>
+
+  </body>
+</html>
