@@ -1,0 +1,339 @@
+to create new branch gh-pages to use the github host
+git checkout -b gh-pages (create branch gh-pages from master)
+git push origin gh-pages (push branch to github remote repo)
+There were errors (see http://makandracards.com/makandra/621-git-delete-a-branch-local-or-remote)
+git fetch -p
+the above situation resulted where the default branch in github repo was gh-pages. In settings, change the default branch to master.
+
+git pull origin gh-pages (contained new file rosario.html)
+git push origin gh-pages (push all changes to branch)
+
+to pull from latest master
+git checkout gh-pages       checkout the branch
+git pull origin master      get the latest from remote master
+git push origin gh-pages    push the latest changes to the branch gh-pages
+
+to force delete gh-pages ignoring all changes
+git branch -D gh-pages
+
+to go back to the head revision if there were changes made in gh-pages or origin/master
+git checkout gh-pages
+git checkout -- views/js/main.js
+git checkout -- views/build/js/main.min.js
+
+https://developers.google.com/apis-explorer/#p/
+www.reddit.com/r/videos
+
+Instructions to create an API
+https://wp-analytify.com/get-client-id-client-secret-developer-api-key-google-developers-console-application/
+
+mincourse-ajax-project key URL:
+https://console.developers.google.com/project/qualified-glow-92305/apiui/credential#
+GOOGLE_API_CONSOLE_KEY = 'AIzaSyB3UHyluRhYUzTE4gkqFB0R5G5OzNeIn9w';
+
+
+https://developers.google.com/maps/documentation/streetview/
+http://hayageek.com/google-street-view-image-api/
+http://apprentice.craic.com/tutorials/42
+
+register in NY times first:
+http://www.nytimes.com/gst/regi.htm
+user: macris.936@gmail.com
+Article Search API
+10 calls/second
+10000 calls/day
+
+http://developer.nytimes.com/io-docs
+http://stackoverflow.com/questions/13681187/how-to-use-jquerys-trim-function
+https://api.jquery.com/jQuery.trim/
+http://stackoverflow.com/questions/23878242/connecting-new-york-times-api-json-data-to-display-in-html
+http://jsonlint.org
+http://stackoverflow.com/questions/6265814/how-to-trigger-jquery-ajax-error-callback-based-on-server-response-in-my-case
+http://stackoverflow.com/questions/12073720/jquery-ajax-request-error-callback
+http://lab.abhinayrathore.com/jquery-standards/
+
+Wiki API
+http://www.mediawiki.org/wiki/Special:ApiSandbox
+http://www.mediawiki.org/wiki/API:FAQ
+http://www.mediawiki.org/wiki/API:Tutorial
+http://www.mediawiki.org/wiki/API:Main_page
+http://stackoverflow.com/questions/964454/how-to-use-wikipedia-api-if-it-exists
+https://gigaom.com/2010/10/29/using-apis-not-quite-as-hard-as-it-looks/
+http://parts.igem.org/wiki/api.php
+https://www.mediawiki.org/wiki/API:Categorymembers
+http://stackoverflow.com/questions/1216712/using-wiki-api-by-format-json-cant-get-the-content
+http://stackoverflow.com/questions/20170608/parsing-properties-of-unknown-json-object
+http://www.bauer-power.net/2010/09/use-jquery-to-add-wikipedia-content-to.html#.VT1RNyFVikp
+https://semantic-mediawiki.org/wiki/How_to_write_a_JavaScript_to_display_data_in_a_Semantic_MediaWiki
+http://stackoverflow.com/questions/16735437/how-to-retrieve-data-from-wikipedia-api-using-json
+http://www.lucas-dev.com/blog/entry/mediawiki-api.html
+http://stackoverflow.com/questions/27848363/difficulty-with-click-event-listener-in-closure
+
+
+Local Storage
+http://www.mysamplecode.com/2012/04/html5-local-storage-session-tutorial.html
+http://stackoverflow.com/questions/25275696/javascript-format-date-time
+http://www.w3schools.com/js/js_dates.asp
+http://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript
+
+http://stackoverflow.com/questions/4186906/check-if-object-exists-in-javascript
+http://toddmotto.com/understanding-the-this-keyword-in-javascript/
+http://javascriptissexy.com/understand-javascripts-this-with-clarity-and-master-it/
+
+http://code.tutsplus.com/tutorials/the-basics-of-object-oriented-javascript--net-7670
+
+
+
+http://learn.knockoutjs.com/#/?tutorial=collections
+
+http://stackoverflow.com/questions/3617113/github-permission-denied-publickey-fatal-the-remote-end-hung-up-unexpectedl
+
+http://www.sitepoint.com/beginners-guide-to-knockoutjs-part-3/
+
+http://jsfiddle.net/rniemeyer/5ABwC/
+https://www.youtube.com/watch?v=xnBROE-RHW0
+http://arturadib.com/hello-backbonejs/docs/1.html
+
+https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes
+git remote set-url origin https://github.com/enggah74/ud989-todo-app.git
+
+1: git clone remote repository
+2: git config --list (make sure remote url is https://github.com/enggah74/ud989-todo-app.git
+3: if remote repository does not exist, create remote repository in github first
+4: git remote add origin https://github.com/enggah74/ud989-todo-app.git
+5: git push origin master
+
+
+let the user set the priority status when creating the todo item
+let users filter or sort by priority status
+expand the priority feature to have more than two levels
+and a recycle bin for recoving deleted items
+and labels for sorting and filtering
+
+
+Project 5
+https://github.com/udacity/fend-office-hours/tree/master/Javascript%20Design%20Patterns/P5%20Project%20Overview
+
+
+
+Requirements
+-Single page application - features a map of your neighborhood or a neighborhood you would like to visit.
+-Add additional functionality to this map inclduing highlighted locations, 3rd party data about those locations
+and various ways to browse the content.
+-Use frameworks, APIs and libraries
+
+Purpose
+-Interacting with API servers is primary function of FE Web deveopers
+-Use of 3rd-party libraries and APIs is a standard and acceptable practice that is encouraged
+
+How will I complete this Project?
+
+1-Review our course JavaScript Design Patterns.
+2-Download the Knockout framework.
+3-Write code required to add a full-screen map to your page using the Google Maps API.
+4-Write code required to add map markers identifying a number of locations your are interested in within this neighborhood.
+5-Implement the search bar functionality to search and filter your map markers. There should be a filtering function on markers that already show up. Simply providing a search function through a third-party API is not enough.
+6-Implement a list view of the identified locations.
+7-Add additional functionality using third-party APIs when a map marker, search result, or list view entry is clicked (ex. Yelp reviews, Wikipedia, Flickr images, etc). If you need a refresher on making AJAX requests to third-party servers, check out our Intro to AJAX course.
+
+
+Helpful Resources
+
+None of these are required, but they may be helpful.
+
+Foursquare API
+MediaWikiAPI for Wikipedia
+Google Maps Street View Service
+Google Maps
+
+knockout
+http://www.sitepoint.com/understanding-knockout/
+
+Google Map
+https://developers.google.com/maps/tutorials/fundamentals/adding-a-google-map
+http://tutsme-webdesign.info/customization-of-a-google-map/
+https://developers.google.com/maps/documentation/javascript/streetview
+https://jsfiddle.net/53x4us89/1/
+http://www.latlong.net/
+http://googlegeodevelopers.blogspot.co.uk/2012/05/google-places-api-search-refinements-as.html
+https://developers.google.com/places/supported_types
+http://stackoverflow.com/questions/8189126/google-places-api-types-functionality
+https://stackoverflow.com/questions/12856232/google-places-api-not-able-to-display-all-search-results
+https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
+http://www.w3schools.com/googleAPI/ref_mapoptions.asp
+https://developers.google.com/maps/documentation/javascript/places-autocomplete
+http://www.latlong.net/
+https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
+http://stackoverflow.com/questions/2832636/google-maps-api-v3-getbounds-is-undefined
+http://jsfiddle.net/gaby/22qte/
+
+
+http://www.sakacon.com/2012/05/diy-ribbon-lei-v11.html
+
+yelp api
+
+http://discussions.udacity.com/t/im-having-trouble-getting-started-using-apis/13597
+key: O1rWaoR54AYSYRwVt_j0UA
+
+API v2.0
+
+
+Consumer Key
+O1rWaoR54AYSYRwVt_j0UA
+
+Consumer Secret
+jIL0YvUYF5XVbty6rGAsGehGl2c
+
+Token
+Qlgr-Q-besAEJD0DgzroM6Odd1cp_SX9
+
+Token Secret
+KTU76LW--FsB88wuiW2nVo-pJCs
+https://github.com/ddo/oauth-1.0a
+https://answers.atlassian.com/questions/245979/how-to-get-consumer-key-and-secret-key
+YELP_URL = 'http://api.yelp.co/v2/search?term=Rose+Garden+Restaurant&location=Union+City+CA'
+http://www.script-tutorials.com/google-places-api-practice/comment-page-1/
+http://www.charlesnurse.com/Blog/Post/445/It-s-a-Knockout-7-Adding-items-to-and-Removing-items-from-Observable-Arrays
+http://oauth.googlecode.com/svn/code/javascript/example/
+http://jsfiddle.net/mythical/XJEzc/       (search w/ knockout)
+http://www.wrapcode.com/knockoutjs/communication-between-multiple-view-models-in-knockoutjs-mvvm-the-right-approach/
+https://www.airpair.com/knockout/posts/top-10-mistakes-knockoutjs
+http://blog.scottlogic.com/2014/02/28/developing-large-scale-knockoutjs-applications.html
+
+
+http://stackoverflow.com/questions/28794863/need-help-knockout-js-observablearray-with-google-maps-api
+https://github.com/lerniri/frontend-nanodegree-neighborhood-map/blob/master/js/app.js
+http://hoonzis.blogspot.com/2012/03/knockoutjs-and-google-maps-binding.html
+http://jsfiddle.net/rniemeyer/FcSmA/
+http://jsfiddle.net/8j7g08qr/1/
+
+http://sameersegal.github.io/KnockOutTweety/
+
+
+
+https://github.com/tenchjames/udacity-frontend-nano-neighborhoodmap/blob/master/src/js/app.js   (foursquare)
+http://antjanus.com/blog/web-development-tutorials/build-a-to-do-application-using-knockoutjs/
+http://stackoverflow.com/questions/10797728/why-is-root-required-here
+http://tenchjames.github.io/map/
+C:/Users/mommy/git/p5-neighborhood-map/index.html
+
+
+
+
+
+https://github.com/peterchon/nanodegree-neighborhood-map-project
+https://github.com/Slomer/Neighborhood-Map-Project-5/tree/gh-pages/js
+https://github.com/6stringbeliever/neighborhood-map
+https://github.com/geng0610/FEND-P5-NeighborhoodMap/blob/master/js/app.js   (foursquare))
+http://ripley6811.github.io/frontend-nanodegree-map-project/jsdoc/    (github foursquare)
+
+
+http://ripley6811.github.io/frontend-nanodegree-map-project/jsdoc/app.js.html   (foursquare)
+http://stackoverflow.com/questions/12544943/google-maps-api-bouncing-marker-issue
+http://stackoverflow.com/questions/6777721/google-maps-api-v3-infowindow-close-event-callback
+http://www.knockmeout.net/2013/06/knockout-debugging-strategies-plugin.html
+http://stackoverflow.com/questions/9261296/how-to-debug-template-binding-errors-for-knockoutjs
+http://cwbuecheler.com/web/tutorials/2013/javascript-callbacks/
+
+
+https://github.com/tenchjames/udacity-frontend-nano-neighborhoodmap/blob/master/src/index.html
+https://github.com/tenchjames/udacity-frontend-nano-neighborhoodmap/tree/master/src/js/lib
+
+https://developer.mozilla.org/en-US/docs/Online_and_offline_events#Example
+
+https://github.com/oped/frontend-nanodegree-neighborhood-map/blob/master/app/scripts/main.js
+
+
+foursquare
+https://foursquare.com/developers/apps
+var FOURSQUARE_CLIENT_ID = 'R42ZEH51THS5SGBYAXFED5Y4FDPQDM3CE5H3RKIRICXX5QD3';
+var FOURSQUARE_CLIENT_SECRET = 'JQ45ALHZFKTXREINGXUBQNA3YIJGWHOUFGA3TE4P0G2OV22V';
+
+$> python -m SimpleHTTPServer 8080
+$> ngrok 8080
+
+Reminder to make a project as a local repository
+1. go to p5-neighborhood-map directory. create your files
+2. git init
+3. git add .
+4. git commit
+
+Push code to remote repository
+1. go to github.com. create a remote repository and copy the repository URI
+2. go to git bash to create a branch prior to pushing to remove repository
+   2.1 git remote add origin https://github.com/enggah74/p5-neighborhood-map.git
+3. git push origin master
+
+Make your link
+1. to create new branch called gh-pages from master to use the github host
+   1.1 go to your git directory (it should say master)
+   1.2 git checkout -b gh-pages
+2. push gh-pages branches to github remote repo
+   2.1 git push origin gh-pages   (enter uri user and password)
+3. open a browser window to go to your url: enggah74.github.io/p5-neighborhood-map
+
+
+
+https://api.foursquare.com/v2/venues/search?client_id=R42ZEH51THS5SGBYAXFED5Y4FDPQDM3CE5H3RKIRICXX5QD3&client_secret='JQ45ALHZFKTXREINGXUBQNA3YIJGWHOUFGA3TE4P0G2OV22V&m=foursquare&llAcc=5&section=food&v=20150605&ll=37.5933918,-122.04382980&query=Holiday Inn Express&limit=1
+37.592587,-122.038542
+
+{
+    "meta": {
+        "code": 200
+    },
+    "response": {
+        "venues": [
+            {
+                "id": "4bcce1b31dd3eee195849a3d",
+                "name": "Holiday Inn Express",
+                "location": {
+                    "address": "31140 Alvarado Niles Rd",
+                    "crossStreet": "at Union Landing",
+                    "lat": 37.598473120266334,
+                    "lng": -122.06722497940063,
+                    "distance": 2139,
+                    "postalCode": "94587",
+                    "cc": "US",
+                    "city": "Union City",
+                    "state": "CA",
+                    "country": "United States",
+                    "formattedAddress": [
+                        "31140 Alvarado Niles Rd (at Union Landing)",
+                        "Union City, CA 94587",
+                        "United States"
+                    ]
+                },
+                "categories": [
+                    {
+                        "id": "4bf58dd8d48988d1fa931735",
+                        "name": "Hotel",
+                        "pluralName": "Hotels",
+                        "shortName": "Hotel",
+                        "icon": {
+                            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/hotel_",
+                            "suffix": ".png"
+                        },
+                        "primary": true
+                    }
+                ],
+                "verified": true,
+                "stats": {
+                    "checkinsCount": 437,
+                    "usersCount": 154,
+                    "tipCount": 1
+                },
+                "specials": {
+                    "count": 0,
+                    "items": []
+                },
+                "hereNow": {
+                    "count": 0,
+                    "summary": "Nobody here",
+                    "groups": []
+                },
+                "storeId": "UOTCA",
+                "referralId": "v-1433564077"
+            }
+        ]
+    }
+}

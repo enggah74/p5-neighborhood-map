@@ -36,50 +36,56 @@ var unioncityCenter = new google.maps.LatLng(37.593392,-122.043830);
  * this function to draw a map of Union City
  **************************************/
 var initializeMap = function() {
-  var mapDiv = document.getElementById('map-canvas');
-  var mapOptions = {
-    center: unioncityCenter,
-    zoom: 15
-  };
 
-  /*** Create a google map of Union City ***/
-  map  = new google.maps.Map(mapDiv, mapOptions);
+  if (window.google) {
+    var mapDiv = document.getElementById('map-canvas');
+    var mapOptions = {
+      center: unioncityCenter,
+      zoom: 15
+    };
 
-  /*** Limit the bounds of Union City ***/
-  var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(37.592502,-122.038472), new google.maps.LatLng(37.596971,-122.048136));
-  var autoCompleteOptions = {bounds: defaultBounds};
+    /*** Create a google map of Union City ***/
+    map  = new google.maps.Map(mapDiv, mapOptions);
 
-  /*** Obtain places from google api service for Union City ***/
-  service = new google.maps.places.PlacesService(map);
+    /*** Limit the bounds of Union City ***/
+    var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(37.592502,-122.038472), new google.maps.LatLng(37.596971,-122.048136));
+    var autoCompleteOptions = {bounds: defaultBounds};
 
-  /*** Position a container to display a list of pre-defined locations for Union City ***/
-  map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('placesId'));
+    /*** Obtain places from google api service for Union City ***/
+    service = new google.maps.places.PlacesService(map);
 
-  /*** Position search box to top left ***/
-  var input = document.getElementById('pac-input');
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById(input));
+    /*** Position a container to display a list of pre-defined locations for Union City ***/
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('placesId'));
 
-  /*** Creates the search box ***/
-  searchBox = new google.maps.places.SearchBox(input, autoCompleteOptions);
+    /*** Position search box to top left ***/
+    var input = document.getElementById('pac-input');
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById(input));
 
-  /* Google StreetView API panoramic images will be placed here */
-  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById("pano"));
+    /*** Creates the search box ***/
+    searchBox = new google.maps.places.SearchBox(input, autoCompleteOptions);
 
-  /* Initialize the street view service */
-  sv = new google.maps.StreetViewService();
+    /* Google StreetView API panoramic images will be placed here */
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById("pano"));
 
-  /* Default the panoramic image to Union City neighborhood */
-  var panoramaOptions = {
-    position: unioncityCenter,
-    pov: {
-      heading: 90,
-      pitch: 0
-    }
-  };
+    /* Initialize the street view service */
+    sv = new google.maps.StreetViewService();
 
-  /* Adds the panorama object to the page */
-  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
-  map.setStreetView(panorama);
+    /* Default the panoramic image to Union City neighborhood */
+    var panoramaOptions = {
+      position: unioncityCenter,
+      pov: {
+        heading: 90,
+        pitch: 0
+      }
+    };
+
+    /* Adds the panorama object to the page */
+    panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+    map.setStreetView(panorama);
+} else {
+    $('#map-canvas')
+      .html('<h1> Google Maps is not loaded. Please check your internet connection.</h1>');
+  }
 };
 
 

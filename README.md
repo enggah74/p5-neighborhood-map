@@ -74,7 +74,7 @@ http://discussions.udacity.com/t/im-having-trouble-getting-started-using-apis/13
 * http://stackoverflow.com/questions/10797728/why-is-root-required-here
 * http://tenchjames.github.io/map/
 
-1. Instructions to run the code
+### Helpful Resources Instructions to run the code
 * Go to http://enggah74.github.io/p5-neighborhood-map. The application displays a google map with markers as background that match the number of locations in the list view. It also displays a panorama map of the center of Union City.
 * Click one of the markers. The application will pop up a google map infoWindow that shows the name of the place and its address.
 * Click one of the places in the list view. The application will pop up a google map infoWindow as if the marker was clicked. It also centers the map and the infoWindow when it is clicked.
