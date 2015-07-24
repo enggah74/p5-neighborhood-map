@@ -1,4 +1,4 @@
-## Website Performance Optimization portfolio project
+## P5 My Neighborhood Map project
 
 ### Project Overview
 
@@ -24,9 +24,9 @@ You will develop a single page application featuring a map of your neighborhood 
 * Foursequare API
 
 ### Helpful Resources
-http://www.sitepoint.com/understanding-knockout/
 
-1. Google Map
+
+## Google Map
 * https://developers.google.com/maps/tutorials/fundamentals/adding-a-google-map
 * http://tutsme-webdesign.info/customization-of-a-google-map/
 * https://developers.google.com/maps/documentation/javascript/streetview
@@ -42,10 +42,9 @@ http://www.sitepoint.com/understanding-knockout/
 * http://stackoverflow.com/questions/2832636/google-maps-api-v3-getbounds-is-undefined
 * http://jsfiddle.net/gaby/22qte/
 
-1. Yelp API
 
-http://discussions.udacity.com/t/im-having-trouble-getting-started-using-apis/13597
-
+## Yelp API
+* http://discussions.udacity.com/t/im-having-trouble-getting-started-using-apis/13597
 * https://github.com/ddo/oauth-1.0a
 * https://answers.atlassian.com/questions/245979/how-to-get-consumer-key-and-secret-key
 * http://www.script-tutorials.com/google-places-api-practice/comment-page-1/
@@ -57,7 +56,8 @@ http://discussions.udacity.com/t/im-having-trouble-getting-started-using-apis/13
 * http://blog.scottlogic.com/2014/02/28/developing-large-scale-knockoutjs-applications.html
 
 
-1. KnockoutJS
+## KnockoutJS
+* http://www.sitepoint.com/understanding-knockout/
 * http://stackoverflow.com/questions/28794863/need-help-knockout-js-observablearray-with-google-maps-api
 * https://github.com/lerniri/frontend-nanodegree-neighborhood-map/blob/master/js/app.js
 * http://hoonzis.blogspot.com/2012/03/knockoutjs-and-google-maps-binding.html
@@ -65,16 +65,19 @@ http://discussions.udacity.com/t/im-having-trouble-getting-started-using-apis/13
 * http://jsfiddle.net/8j7g08qr/1/
 * http://sameersegal.github.io/KnockOutTweety/
 
-1. Foursquare
+
+## Foursquare
 * https://foursquare.com/developers/apps
 
-1. Very Useful Resource where I got most of the code
+
+## Very Useful Resource where I got most of the code
 * https://github.com/tenchjames/udacity-frontend-nano-neighborhoodmap/blob/master/src/js/app.js   (foursquare)
 * http://antjanus.com/blog/web-development-tutorials/build-a-to-do-application-using-knockoutjs/
 * http://stackoverflow.com/questions/10797728/why-is-root-required-here
 * http://tenchjames.github.io/map/
 
-### Helpful Resources Instructions to run the code
+
+### Instructions to run the code
 * Go to http://enggah74.github.io/p5-neighborhood-map. The application displays a google map with markers as background that match the number of locations in the list view. It also displays a panorama map of the center of Union City.
 * Click one of the markers. The application will pop up a google map infoWindow that shows the name of the place and its address.
 * Click one of the places in the list view. The application will pop up a google map infoWindow as if the marker was clicked. It also centers the map and the infoWindow when it is clicked.
