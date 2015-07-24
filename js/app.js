@@ -26,7 +26,7 @@ var FOURSQUARE_VERSION = today.getFullYear().toString() + ("0" + (today.getMonth
 
 
 /*** Define global variables  needed for the map and searchBox ***/
-var map, sv, panorama, service, searchBox;
+var map, sv, panorama, service;
 var unioncityCenter = new google.maps.LatLng(37.593392,-122.043830);
 
 
@@ -60,9 +60,6 @@ var initializeMap = function() {
     /*** Position search box to top left ***/
     var input = document.getElementById('pac-input');
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById(input));
-
-    /*** Creates the search box ***/
-    searchBox = new google.maps.places.SearchBox(input, autoCompleteOptions);
 
     /* Google StreetView API panoramic images will be placed here */
     map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById("pano"));
@@ -232,7 +229,6 @@ UnionCityPlaceModel.prototype = {
  ***/
 var UnionCityPlaceViewModel = function () {
   var self = this;
-  self.allUnionCityPlaces = ko.observableArray([]);
 
   /* Update the current location in the ViewModel when  marker is clicked */
   self.subscribeToMapClick = function (place) {
@@ -257,14 +253,6 @@ var UnionCityPlaceViewModel = function () {
       }
     });
   };
-
-  /* pushes new location and adds subscriptions above */
-  self.addPlace = function (place) {
-      self.subscribeToMapClick(place);
-      self.subscribeToFourSquareUpdate(place);
-      place.markerOpen(true);
-  };
-
 
   /* Close current window to open new one */
   self.closeInfoWindows = function () {
@@ -333,6 +321,16 @@ var UnionCityPlaceViewModel = function () {
     markers, infoWindows, information from Foursquare and an estimated
     panoramic view
   ***/
+  self.allUnionCityPlaces = ko.observableArray([]);
+
+  self.query = ko.observable('');
+
+  self.search = ko.computed(function(){
+    return ko.utils.arrayFilter(self.allUnionCityPlaces(), function(place){
+      return place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+    });
+  });
+
   var currentPlace;
   for (var i = 0; i < initialUnionCityPlaces.length; i++) {
       currentPlace = new UnionCityPlaceModel(initialUnionCityPlaces[i]);
@@ -341,16 +339,6 @@ var UnionCityPlaceViewModel = function () {
       self.subscribeToMapClick(currentPlace);
       self.subscribeToFourSquareUpdate(currentPlace);
   }
-
-  google.maps.event.addListener(searchBox, 'places_changed', function () {
-    var places = searchBox.getPlaces();
-    if (places.length === 0) {
-        return;
-    }
-    var newPlace = new UnionCityPlaceModel({name: places[0].name, types: places[0].types});
-    newPlace.init();
-    self.addPlace(newPlace);
-  });
 
 };
 
