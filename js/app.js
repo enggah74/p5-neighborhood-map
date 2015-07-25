@@ -324,23 +324,44 @@ var UnionCityPlaceViewModel = function () {
   self.allUnionCityPlaces = ko.observableArray([]);
 
   self.query = ko.observable('');
-
-  self.search = ko.computed(function(){
-    return ko.utils.arrayFilter(self.allUnionCityPlaces(), function(place){
-      return place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
-    });
+  self.query.subscribe(function () {
+      console.log(self.query());
+      self.displayNewPlaces(self.query());
   });
 
-  var currentPlace;
-  for (var i = 0; i < initialUnionCityPlaces.length; i++) {
-      currentPlace = new UnionCityPlaceModel(initialUnionCityPlaces[i]);
-      currentPlace.init();
-      self.allUnionCityPlaces.push(currentPlace);
-      self.subscribeToMapClick(currentPlace);
-      self.subscribeToFourSquareUpdate(currentPlace);
-  }
+  /*** This function will iterate through the pre-defined locations of Union City for
+       initial load of the map or when user wants to filter
+  ***/
+  self.displayNewPlaces = function(filter) {
+    var currentPlace;
+    filter = $.trim(filter);
+    console.log("filter="+filter);
 
+    self.allUnionCityPlaces([]);
+
+    /***  The following logic will search the pre-defined array
+          of Union City locations and populate the results on the
+          list view based on the filter entered.
+    ***/
+
+    for (var i = 0; i < initialUnionCityPlaces.length; i++) {
+
+      if ( (filter.length === 0) ||
+           (filter.length > 0 && initialUnionCityPlaces[i].name.search(new RegExp(filter, 'i')) >= 0) ) {
+          console.log("matched!");
+          currentPlace = new UnionCityPlaceModel(initialUnionCityPlaces[i]);
+          currentPlace.init();
+          self.allUnionCityPlaces.push(currentPlace);
+          self.subscribeToMapClick(currentPlace);
+          self.subscribeToFourSquareUpdate(currentPlace);
+
+      }
+    }
+  };
+
+  self.displayNewPlaces(self.query());
 };
+
 
 window.addEventListener('load', function() {
   var status = document.getElementById("status");
